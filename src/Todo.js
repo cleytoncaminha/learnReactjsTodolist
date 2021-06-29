@@ -3,11 +3,14 @@ import './Todo.css'
 import List from './components/List.js'
 import Item from './components/Item'
 import TodoForm from './components/TodoForm'
+import Modal from './components/Modal'
+
 
 const SAVED_ITEMS = "savedItems"
 
 function Todo(){
 
+    const [showModal, setShowModal] = useState(false)
     const [items, setItems] = useState([]);
 
 useEffect(()=>{
@@ -23,8 +26,9 @@ useEffect(()=>{
 
     function onAddItem(text){
 
-        let item = new Item(text)
-        setItems([...items, item])
+        let item = new Item(text);
+        setItems([...items, item]);
+        onHideModal();
     }
     function onItemDeleted(item){
         
@@ -45,12 +49,18 @@ useEffect(()=>{
         setItems(updatedItems)
     }
     
+    function onHideModal(event){
+        setShowModal(false)}
+
     return (
     <div className="container">
-        <h1>Lista</h1>
-    <TodoForm onAddItem={onAddItem}></TodoForm>
+       <header> <h1>Lista</h1>
+       <button className="addButton" onClick={()=>{setShowModal(true)}}>+</button>
+       </header>
     <List onItemDeleted={onItemDeleted} onDone={onDone} items={items}></List>
-    </div>
+   <Modal show={showModal} onHideModal={onHideModal}><TodoForm onAddItem={onAddItem}></TodoForm></Modal> 
+   </div>
+    
     )
 }
 
